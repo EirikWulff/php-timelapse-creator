@@ -1,0 +1,1 @@
+This folder should contain the raw picture files from the capture device. As long as the pictures contain EXIF data, they will be sorted and put in order by the processing script.

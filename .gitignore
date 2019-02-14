@@ -1,0 +1,6 @@
+.phpintel
+*/*.jpg
+vendor
+video/*.mp4
+composer.lock
+settings.env

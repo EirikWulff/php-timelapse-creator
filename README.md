@@ -30,7 +30,7 @@ The script will do the following:
 ### 0. Initialising ###
 At first, the script will create the folders it needs, and empty the temporary folders before doing the actual work. By temporary folders, we mean the folder for the processed images (default: 'tmp-processed') and the image sequence folder (default: 'tmp-sequence'). They will also be emptied during after creating the image sequence and after creating the video, to conserve disk space.
 
-### 1. Process the photos ###
+### 1. Process the images ###
 The script will first scan through all source photos and read the EXIF info contained in them. If it isn't a duplicate, the photo will put the date and time it was taken (from EXIF) superimposed in the lower right corner, while the **logo.png** will be placed in the top left corner, with a 40% transparency. PS! There are lots of other editing possibilities here, but this is what was needed in this project.
 
 The resulting image will be placed in the folder for processed images (default: 'tmp-processed'), with it's EXIF date as filename (YYYY-MM-DD-HHMMSS).
@@ -39,10 +39,10 @@ If duplicates are encountered during processing, they are deleted from the sourc
 
 And yes, thousands of 1080p images will take up quite a lot of space. It is wise to have the temporary folders residing on a fast disk with lots of space
 
-### 2. Creating the image sequence ###
+### 2. Create the image sequence ###
 After this, the script will scan the processed image folder, and create a photo sequence by copying the files to the 'tmp-sequence' folder. Their filenames will be in the pattern 'seq-########.jpg', the oldest will be 'seq-00000001.jpg' and so on and so on. This will make it possible for ffmpeg to create the video with the correct frame sequence.
 
-### 3. Creating the video file ###
+### 3. Create the video ###
 By default, the script will create a HEVC file with a Constant Rate Factor of 30 (≈ 5,7 Mbit/sec bitrate). The filename will also contain the date of the last photo in the sequence.
 
 The resulting video will be placed in the video folder, with a name containing the date of the last image taken.

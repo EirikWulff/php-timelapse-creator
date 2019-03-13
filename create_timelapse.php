@@ -48,8 +48,8 @@ $conf->imgfolder = getenv('PATH_IMG') ?: 'tmp-processed';
 $conf->seqfolder = getenv('PATH_SEQ') ?: 'tmp-sequence';
 $conf->videofolder = getenv('PATH_VIDEO') ?: 'video';
 
-$conf->keep_tmp_processed = getenv('KEEP_TMP_PROCESSED') ?: 1; // Will keep the processed images after the run.
-$conf->keep_tmp_sequence = getenv('KEEP_TMP_SEQUENCE') ?: 1; // Will keep the processed images after the run.
+$conf->keep_tmp_processed = getenv('KEEP_TMP_PROCESSED') ?: 0; // Will keep the processed images after the run.
+$conf->keep_tmp_sequence = getenv('KEEP_TMP_SEQUENCE') ?: 0; // Will keep the processed images after the run.
 
 echo "Welcome to the Timelapse Editor\n\n";
 /* print_r($conf); exit; */

@@ -4,7 +4,7 @@ This project is basically a PHP script that takes a sequence of photos, sorts th
 
 ## Requirements ##
 
-* PHP 7.x - Install with [Homebrew](https://brew.sh) on macOS (brew install php)
+* PHP 8 - Install with [Homebrew](https://brew.sh) on macOS (brew install php). PHP 7.x also works great.
 * PHP Composer - Install with Homebrew on macOS (brew install composer)
 * ffmpeg (with x264/x265 support) - Install with Homebrew on macOS (brew install ffmpeg)
 * (optional) Imagemagick - Install with Homebrew on macOS (brew install imagemagick)

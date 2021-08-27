@@ -24,34 +24,34 @@ $dotenv->load(__DIR__.'/settings.env');
 
 // Setting up the config object by using values set in .env or default values
 $conf = new stdclass();
-$conf->dt_source = getenv('FILEDATE_SRC') ?: 'exif'; // Where to get the image timestamp, 'exif'|'filename'|'filemod'
-$conf->dt_format = getenv('FILENAME_FORMAT') ?: 'Y-m-d_His'; // If getting the timestamp from the file name, specify date format.
-$conf->im_driver = getenv('IMAGE_DRIVER') ?: 'imagick';
-$conf->jpeg_quality = getenv('IMAGE_JPEG_QUALITY') ?? 90; // JPEG Quality. Higher means cleaner images.
-$conf->font = getenv('IMAGE_FONT') ?: 0; // The font file to use for the superimposed text
-$conf->nologo = getenv('IMAGE_NO_LOGO') ?: 0; // Set to 0 to disable the superimposed logo
-$conf->logofile = getenv('IMAGE_LOGO') ?: 'logo.png'; // Logo to superimpose on the images
-$conf->logo_height = getenv('IMAGE_LOGO_HEIGHT') ?: 200;
-$conf->logo_opacity = getenv('IMAGE_LOGO_OPACITY') ?: 40; // The logo opacity, in percent. 0 = transparent, 100 = opaque
-$conf->fontsize_date = getenv('IMAGE_FONTSIZE_DATE') ?: 26;  
-$conf->fontsize_time = getenv('IMAGE_FONTSIZE_TIME') ?: 40;
-$conf->date_format = getenv('IMAGE_DATE_FORMAT') ?: 'd.m.Y';
-$conf->time_format = getenv('IMAGE_TIME_FORMAT') ?: 'H:i:s';
-$conf->rotate_images = getenv('IMAGE_ROTATE') ?: 1; // For some reason, iPhone images are often interpreted as upside-down. So we rotate them.
-$conf->rotate_skip = getenv('IMAGE_ROTATE_SKIP') ?: 0; // Use if the first x images does not need rotating. 0 = do not skip.
+$conf->dt_source = $_ENV['FILEDATE_SRC'] ?: 'exif'; // Where to get the image timestamp, 'exif'|'filename'|'filemod'
+$conf->dt_format = $_ENV['FILENAME_FORMAT'] ?: 'Y-m-d_His'; // If getting the timestamp from the file name, specify date format.
+$conf->im_driver = $_ENV['IMAGE_DRIVER'] ?: 'imagick';
+$conf->jpeg_quality = $_ENV['IMAGE_JPEG_QUALITY'] ?: 90; // JPEG Quality. Higher means cleaner images.
+$conf->font = $_ENV['IMAGE_FONT'] ?: 1; // The font file to use for the superimposed text
+$conf->nologo = $_ENV['IMAGE_NO_LOGO'] ?: 0; // Set to 0 to disable the superimposed logo
+$conf->logofile = $_ENV['IMAGE_LOGO'] ?: 'logo.png'; // Logo to superimpose on the images
+$conf->logo_height = $_ENV['IMAGE_LOGO_HEIGHT'] ?: 200;
+$conf->logo_opacity = $_ENV['IMAGE_LOGO_OPACITY'] ?: 40; // The logo opacity, in percent. 0 = transparent, 100 = opaque
+$conf->fontsize_date = $_ENV['IMAGE_FONTSIZE_DATE'] ?: 26;  
+$conf->fontsize_time = $_ENV['IMAGE_FONTSIZE_TIME'] ?: 40;
+$conf->date_format = $_ENV['IMAGE_DATE_FORMAT'] ?: 'd.m.Y';
+$conf->time_format = $_ENV['IMAGE_TIME_FORMAT'] ?: 'H:i:s';
+$conf->rotate_images = $_ENV['IMAGE_ROTATE'] ?: 0; // For some reason, iPhone images are often interpreted as upside-down. So we rotate them.
+$conf->rotate_skip = $_ENV['IMAGE_ROTATE_SKIP'] ?: 0; // Use if the first x images does not need rotating. 0 = do not skip.
 
-$conf->video_format = getenv('VIDEO_FORMAT') ?: 'hevc'; // 'hevc' or 'x264'
-$conf->framerate = getenv('VIDEO_FRAMERATE') ?: 25;
-$conf->crf_hevc = getenv('CRF_HEVC') ?: 30; // Constant Rate Factor for HEVC video. 30 seems to keep good detail in a HD picture.
-$conf->crf_x264 = getenv('CRF_x264') ?: 25; // Constant Rate Factor for x264 video (24-28 should work well)
+$conf->video_format = $_ENV['VIDEO_FORMAT'] ?: 'hevc'; // 'hevc' or 'x264'
+$conf->framerate = $_ENV['VIDEO_FRAMERATE'] ?: 25;
+$conf->crf_hevc = $_ENV['CRF_HEVC'] ?: 30; // Constant Rate Factor for HEVC video. 30 seems to keep good detail in a HD picture.
+$conf->crf_x264 = $_ENV['CRF_x264'] ?: 25; // Constant Rate Factor for x264 video (24-28 should work well]
 
-$conf->srcfolder = getenv('PATH_SRC') ?: 'images-src';
-$conf->imgfolder = getenv('PATH_IMG') ?: 'tmp-processed';
-$conf->seqfolder = getenv('PATH_SEQ') ?: 'tmp-sequence';
-$conf->videofolder = getenv('PATH_VIDEO') ?: 'video';
+$conf->srcfolder = $_ENV['PATH_SRC'] ?: 'images-src';
+$conf->imgfolder = $_ENV['PATH_IMG'] ?: 'tmp-processed';
+$conf->seqfolder = $_ENV['PATH_SEQ'] ?: 'tmp-sequence';
+$conf->videofolder = $_ENV['PATH_VIDEO'] ?: 'video';
 
-$conf->keep_tmp_processed = getenv('KEEP_TMP_PROCESSED') ?: 0; // Will keep the processed images after the run.
-$conf->keep_tmp_sequence = getenv('KEEP_TMP_SEQUENCE') ?: 0; // Will keep the processed images after the run.
+$conf->keep_tmp_processed = $_ENV['KEEP_TMP_PROCESSED'] ?: 0; // Will keep the processed images after the run.
+$conf->keep_tmp_sequence = $_ENV['KEEP_TMP_SEQUENCE'] ?: 0; // Will keep the processed images after the run.
 
 echo "Welcome to the Timelapse Editor\n\n";
 /* print_r($conf); exit; */

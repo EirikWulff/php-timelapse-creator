@@ -91,6 +91,12 @@ if (! $conf->nologo):
 	$logo->opacity($conf->logo_opacity);
 endif;
 
+// Checking for an existing font file before continuing
+if (! $conf->font || ! file_exists($conf->font) ):
+	die('No font file found ['.$conf->font.']'."\n");
+else:
+	echo "Using font file '$conf->font'\n";
+endif;
 
 echo "\n1. Processing files...\n";
 $files = glob($conf->srcfolder.'/*.{png,jpg,jpeg,JPG}', GLOB_BRACE);

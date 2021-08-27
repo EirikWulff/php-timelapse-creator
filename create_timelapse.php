@@ -24,6 +24,8 @@ $dotenv->load(__DIR__.'/settings.env');
 
 // Setting up the config object by using values set in .env or default values
 $conf = new stdclass();
+$conf->dt_source = getenv('FILEDATE_SRC') ?: 'exif'; // Where to get the image timestamp, 'exif'|'filename'|'filemod'
+$conf->dt_format = getenv('FILENAME_FORMAT') ?: 'Y-m-d_His'; // If getting the timestamp from the file name, specify date format.
 $conf->im_driver = getenv('IMAGE_DRIVER') ?: 'imagick';
 $conf->jpeg_quality = getenv('IMAGE_JPEG_QUALITY') ?? 90; // JPEG Quality. Higher means cleaner images.
 $conf->font = getenv('IMAGE_FONT') ?: 1; // The font file to use for the superimposed text
@@ -108,7 +110,20 @@ foreach($files as $file):
 	if ($iFileNum > $conf->rotate_skip && $conf->rotate_images):
 		$image->rotate(180);
 	endif;
-	$dateTime = Carbon::parse($image->exif('DateTime'));
+	switch ($conf->dt_source):
+		case 'exif':
+			$dateTime = Carbon::parse($image->exif('DateTime'));
+			break;
+		case 'filename':
+			// Provided the file name is 'yyyy-mm-dd_hhmmss.jpg'
+			$fn = basename($file, '.jpg');
+			$dateTime = Carbon::createFromFormat($conf->dt_format, $fn);
+			break;
+		case 'filemod':
+			$dateTime = Carbon::parse(filemtime($file));
+			break;
+	endswitch;
+	//$dateTime = Carbon::parse($image->exif('DateTime'));
 	if ($dateTime->gt($dtHighest)):
 		unset($dtHighest);
 		$dtHighest = $dateTime->copy();

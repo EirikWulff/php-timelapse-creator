@@ -40,7 +40,7 @@ $conf->time_format = $_ENV['IMAGE_TIME_FORMAT'] ?: 'H:i:s';
 $conf->rotate_images = $_ENV['IMAGE_ROTATE'] ?: 0; // For some reason, iPhone images are often interpreted as upside-down. So we rotate them.
 $conf->rotate_skip = $_ENV['IMAGE_ROTATE_SKIP'] ?: 0; // Use if the first x images does not need rotating. 0 = do not skip.
 
-$conf->video_format = $_ENV['VIDEO_FORMAT'] ?: 'hevc'; // 'hevc' or 'x264'
+$conf->video_format = $_ENV['VIDEO_FORMAT'] ?: 'hevc'; // 'hevc', 'hevc_vt' or 'x264'
 $conf->framerate = $_ENV['VIDEO_FRAMERATE'] ?: 25;
 $conf->crf_hevc = $_ENV['CRF_HEVC'] ?: 30; // Constant Rate Factor for HEVC video. 30 seems to keep good detail in a HD picture.
 $conf->crf_x264 = $_ENV['CRF_x264'] ?: 25; // Constant Rate Factor for x264 video (24-28 should work well]
@@ -169,8 +169,8 @@ foreach($files as $file):
 		$iSaved++;
 	else:
 		// We have already made this image, so we call it a duplicate
-		echo '-> duplicate, deleting'."\n";
-		unlink($file);
+		echo '-> duplicate, skipping'."\n";
+		# unlink($file);
 		$iDupes++;
 	endif;
 	unset($image);
@@ -194,17 +194,16 @@ if ($conf->keep_tmp_processed == 0) emptyFolderContents($conf->imgfolder);
 $videoname = 'video/timelapse'. $dtHighest->format('_Y-m-d') .'_1080p';
 
 if (strtolower($conf->video_format) == 'hevc'):
-	$ffmpeg_hevc = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx265 -crf '.$conf->crf_hevc.' -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
+	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx265 -crf '.$conf->crf_hevc.' -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
 	echo "\n3. Creating HEVC video...\n";
-	exec($ffmpeg_hevc);
 elseif (strtolower($conf->video_format) == 'hevc_vt'):
-		$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v hevc_videotoolbox -b:v 6000K -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
-		echo "\n3. Creating HEVC video...\n";
+	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v hevc_videotoolbox -b:v 6000K -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
+	echo "\n3. Creating HEVC video...\n";
 else:
-	$ffmpeg_x264 = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx264 -crf 25 -movflags +faststart -an '.$videoname.'_x264.mp4';
+	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx264 -crf 25 -movflags +faststart -an '.$videoname.'_x264.mp4';
 	echo "\n3. Creating x264 video...\n";
-	exec($ffmpeg_x264);
 endif;
+exec($ffmpeg_cmd);
 
 // Emptying the image sequence folder
 if ($conf->keep_tmp_sequence == 0) emptyFolderContents($conf->seqfolder);

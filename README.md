@@ -35,9 +35,11 @@ The script will first scan through all source photos and read the EXIF info cont
 
 The resulting image will be placed in the folder for processed images (default: 'tmp-processed'), with it's EXIF date as filename (YYYY-MM-DD-HHMMSS).
 
-If duplicates are encountered during processing, they are deleted from the source folder and skipped from processing.
+There is also the option to skip EXIF and use the picture filename or also its modification time to make the sequence.
 
-And yes, thousands of 1080p images will take up quite a lot of space. It is wise to have the temporary folders residing on a fast disk with lots of space
+If duplicates are encountered during processing, they are skipped from processing (but not deleted from the source folder).
+
+And yes, thousands of 1080p images will take up quite a lot of space. It is wise to have the temporary folders residing on a fast disk with lots of free space available.
 
 ### 2. Create the image sequence ###
 After this, the script will scan the processed image folder, and create a photo sequence by copying the files to the 'tmp-sequence' folder. Their filenames will be in the pattern 'seq-########.jpg', the oldest will be 'seq-00000001.jpg' and so on and so on. This will make it possible for ffmpeg to create the video with the correct frame sequence.
@@ -51,7 +53,9 @@ The resulting video will be placed in the video folder, with a name containing t
 All configuration can be done in the file *settings.env*. All default settings are available in the file *settings.env.example*, so a good routine is to copy settings.env.example to settings.env before running the script. You may also create a settings.env file containing only the settings you want to change. Most of the default settings will work fine as they are, even without creating a settings.env file at all. The most likely candidates for changes are **IMAGE_FONT** and possibly the **IMAGE_ROTATE** settings.
 
 ### Overview ###
-* **IMAGE_FONT** - Path to the font file to use for the superimposed text. The default value will work only on macOS. You may also use integer values 1-5 to use the GD built-in fonts, as documented on [the image library website](http://image.intervention.io/api/text). A pro tip is to test this with a few images before you do the full 100000 image run. Default: "/Library/Fonts/Arial.ttf"
+* **FILEDATE_SRC** - method used to get the image timestamp. Default: "exif". You may also use "filename" if the filename itself is a timestamp, or "filemod" to extract the timestamp from the file's modification time.
+* **FILEDATE_FORMAT** - (Only used if FILEDATE_SRC is 'filename') The date format used in the filename. Default: "Y-m-d_His"
+* **IMAGE_FONT** - Path to the font file to use for the superimposed text. The default value will work only on macOS. You may also use integer values 1-5 to use the GD built-in fonts, as documented on [the image library website](http://image.intervention.io/api/text). A pro tip is to test this with a few images before you do the full 100000 image run. Default: "/System/Library/Fonts/Arial.ttf"
 * **IMAGE_DRIVER** - Which driver to use whith image processing, default "imagick". Will use "gd" automatically if imagick is not available
 * **IMAGE_FONTSIZE_DATE** - Font size to use on the superimposed date. Default: 26
 * **IMAGE_FONTSIZE_TIME** - Font size for the superimposed time. Default: 40

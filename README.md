@@ -68,11 +68,11 @@ All configuration can be done in the file *settings.env*. All default settings a
 * **IMAGE_JPEG_QUALITY** - JPEG Quality for the processed images. Keep high to avoid getting a bad video result. Default: 90
 * **IMAGE_ROTATE** - For some reason, images originating from iPhone (iOS 12+) ends up upside-down when imported by Imagemagick. This setting will let the script rotate the image when editing it. Set to 0 to disable the rotation. Default: 1
 * **IMAGE_ROTATE_SKIP** - If the first X images doesn't need rotating (for instance iPhone-images from iOS < 12), set this value to X. Default: 0
-* **VIDEO_FORMAT** - Lets you specify the video encoding to use when making the video. You may use "x264" to enjoy much faster encoding (and much larger files), or "hevc" to use the more efficient HEVC/x265 format. There is also the choice of "hevc_vt", which uses Apple's VideoToolKit. This will make M1 Macs do a vary fast HEVC encoding. Default: "hevc"
+* **VIDEO_FORMAT** - Lets you specify the video encoding to use when making the video. You may use "x264" to enjoy much faster encoding (and much larger files), or "hevc" to use the more efficient HEVC/x265 format. There is also the choice of "hevc_vt", which uses Apple's VideoToolbox. This will make M1 Macs do a vary fast HEVC encoding. Default: "hevc"
 * **VIDEO_FRAMERATE** - The framerate (frames per second) of the resulting video. Default: 25
 * **CRF_HEVC** - Constant Rate Factor for HEVC encoding. Higher value = smaller file. The default value results in a bitrate ≈ 5-6 Mbit/s. Default: 30
 * **CRF_x264** - Constant Rate Factor to use for x264 encoding. The default value has about the same video quality as a HEVC CRF of 30, but results in a much larger file (bitrate ≈ 14 Mbit/s). Default: 25
-* **BR_VIDEOTOOLKIT** - VideoToolKit does not support CRF. So if you use "hevc_vt", bitrate must be given in kilobits. Default: "6000K"
+* **BR_VIDEOTOOLBOX** - VideoToolbox does not support CRF. So if you use "hevc_vt", bitrate must be given in kilobits. Default: "6000K"
 * **PATH_SRC** - Path to the source folder, where the original images are stored, without trailing "/". Default: "images-src"
 * **PATH_IMG** - Where to put images after superimposing the timestamp (and logo). Default: "images"
 * **PATH_SEQ** - Where the numbered images are stored. This is where ffmpeg finds the image sequence it needs to produce the video. Default: "images-sequence"

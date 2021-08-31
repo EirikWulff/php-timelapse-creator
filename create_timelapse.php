@@ -44,6 +44,7 @@ $conf->video_format = $_ENV['VIDEO_FORMAT'] ?: 'hevc'; // 'hevc', 'hevc_vt' or '
 $conf->framerate = $_ENV['VIDEO_FRAMERATE'] ?: 25;
 $conf->crf_hevc = $_ENV['CRF_HEVC'] ?: 30; // Constant Rate Factor for HEVC video. 30 seems to keep good detail in a HD picture.
 $conf->crf_x264 = $_ENV['CRF_x264'] ?: 25; // Constant Rate Factor for x264 video (24-28 should work well]
+$conf->br_vt = $_ENV['BR_VIDEOTOOLKIT'] ?: "6000K"; // Bitrate for HEVC video encoding using VideoToolKit ('hevc_vt')
 
 $conf->srcfolder = $_ENV['PATH_SRC'] ?: 'images-src';
 $conf->imgfolder = $_ENV['PATH_IMG'] ?: 'tmp-processed';
@@ -164,6 +165,7 @@ foreach($files as $file):
 		//$save_location = $conf->destfolder.'image-' . sprintf('%06d', $filenum) . $conf->filetype;
 
 		$image->save($save_location, $conf->jpeg_quality);
+		//$image->save($save_location);
 
 		echo '-> '.$save_location."\n";
 		$iSaved++;
@@ -191,18 +193,19 @@ endforeach;
 // Emptying the temp folder for processed images
 if ($conf->keep_tmp_processed == 0) emptyFolderContents($conf->imgfolder);
 
-$videoname = 'video/timelapse'. $dtHighest->format('_Y-m-d') .'_1080p';
+$videoname = $conf->videofolder.'/'.'timelapse'. $dtHighest->format('_Y-m-d') .'_1080p';
 
 if (strtolower($conf->video_format) == 'hevc'):
-	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx265 -crf '.$conf->crf_hevc.' -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
+	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx265 -crf '.$conf->crf_hevc.' -pix_fmt yuvj420p -tag:v hvc1 -movflags +faststart -an "'.$videoname.'_hevc.mp4"';
 	echo "\n3. Creating HEVC video...\n";
 elseif (strtolower($conf->video_format) == 'hevc_vt'):
-	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v hevc_videotoolbox -b:v 6000K -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
-	echo "\n3. Creating HEVC video...\n";
+	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v hevc_videotoolbox -b:v '.$conf->br_vt.' -pix_fmt yuvj420p -tag:v hvc1 -movflags +faststart -an "'.$videoname.'_hevc.mp4"';
+	echo "\n3. Creating HEVC video with VideoToolkit...\n";
 else:
-	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx264 -crf 25 -movflags +faststart -an '.$videoname.'_x264.mp4';
+	$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx264 -crf 25 -movflags +faststart -an "'.$videoname.'_x264.mp4"';
 	echo "\n3. Creating x264 video...\n";
 endif;
+// echo 'Running ffmpeg command: '.$ffmpeg_cmd."\n";
 exec($ffmpeg_cmd);
 
 // Emptying the image sequence folder

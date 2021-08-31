@@ -191,6 +191,9 @@ if (strtolower($conf->video_format) == 'hevc'):
 	$ffmpeg_hevc = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx265 -crf '.$conf->crf_hevc.' -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
 	echo "\n3. Creating HEVC video...\n";
 	exec($ffmpeg_hevc);
+elseif (strtolower($conf->video_format) == 'hevc_vt'):
+		$ffmpeg_cmd = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v hevc_videotoolbox -b:v 6000K -tag:v hvc1 -movflags +faststart -an '.$videoname.'_hevc.mp4';
+		echo "\n3. Creating HEVC video...\n";
 else:
 	$ffmpeg_x264 = 'ffmpeg -y -framerate '.$conf->framerate.' -i '.$conf->seqfolder.'/seq-%08d.jpg -c:v libx264 -crf 25 -movflags +faststart -an '.$videoname.'_x264.mp4';
 	echo "\n3. Creating x264 video...\n";
